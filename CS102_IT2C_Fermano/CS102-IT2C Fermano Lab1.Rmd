@@ -1,0 +1,45 @@
+---
+title: "CS 102 IT2C Fermano"
+author: "Fermano, Aaron John"
+date: "2024-02-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(rvest)
+library(stringr)
+```
+
+```{r}
+
+urlink <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225007011&rh=n%3A16225007011%2Cn%3A1292115011&ref=nav_em__nav_desktop_sa_intl_monitors_0_2_6_8"
+weblink <- bow(urlink,user_agent = "EDUCATION purposes")
+weblink
+
+```
+
+```{r name}
+ monitorname<- scrape(weblink)%>%
+  html_nodes("h2.a-size-mini.a-spacing-none.a-color-base.s-line-clamp-4")%>%
+     html_text()
+  monitorname
+```
+
+```{r price}
+monitorprice <- scrape(weblink)%>%
+   html_nodes("span.a-price-whole")%>%
+ html_text()
+ monitorprice
+```
+
+```{r ratings}
+monitorratings <- scrape(weblink)%>%
+  html_nodes("i.a-icon.a-icon-star-small.a-star-small-4-5 .aok-align-bottom")%>%
+html_text()
+monitorratings
+```
