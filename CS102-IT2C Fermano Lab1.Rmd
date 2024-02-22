@@ -1,0 +1,253 @@
+---
+title: "CS 102 IT2C Fermano"
+author: "Fermano, Aaron John"
+date: "2024-02-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("dplyr")
+install.packages("rvest")
+install.packages("httr")
+install.packages("polite")
+#Libraries
+#library(dplyr)
+#library(rvest)
+#library(httr)
+#library(polite)
+```
+
+```{r}
+library(polite)
+library(rvest)
+library(httr)
+library(dplyr)
+
+Watches <- data.frame() 
+
+Link1_1 <- "https://www.amazon.co.uk/s?k=Watch&crid=3P7G4EVHY387&sprefix=watc%2Caps%2C448&ref=nb_sb_noss_2"
+session <- bow(Link1_1, user_agent = "Educational Purposes")
+session <- scrape(session)  
+
+NameBatch1 <- session %>%
+  html_nodes(".s-widget-container > span span.a-size-base-plus") %>%
+  html_text()
+NameBatch1 <- NameBatch1[1:35]
+NameBatch1
+
+PriceBatch1 <- session %>%
+  html_nodes("div:nth-of-type(n+7) .s-widget-container > span .a-row div.a-row:nth-of-type(1)") %>%
+  html_text()
+PriceBatch1 <- PriceBatch1[1:35]
+PriceBatch1
+
+RatingsBatch1 <- session %>%
+  html_nodes(".s-widget-container > span span.s-underline-text") %>%
+  html_text()
+RatingsBatch1 <- RatingsBatch1[1:35]
+RatingsBatch1
+
+ReviewsBatch1 <- session %>%
+  html_nodes(".s-widget-container > span span.a-icon-alt") %>%
+  html_text()
+ReviewsBatch1 <- ReviewsBatch1[1:35]
+ReviewsBatch1
+
+Watches <- rbind(Watches,data.frame
+                       (Name = NameBatch1,
+                        Price = PriceBatch1,
+                        No.Ratings = RatingsBatch1,
+                        Ratings = ReviewsBatch1))
+
+Link1_2 <- "https://www.amazon.co.uk/s?k=Watch&page=2&crid=3P7G4EVHY387&qid=1707441846&sprefix=watc%2Caps%2C448&ref=sr_pg_2"
+session1 <- bow(Link1_2, user_agent = "Educational Purposes")
+session1 <- scrape(session1)  
+
+NameBatch2 <- session1 %>%
+  html_nodes(".s-widget-container > span div:nth-of-type(2) span.a-size-base-plus") %>%
+  html_text()
+NameBatch2 <- NameBatch2 [1:35]
+NameBatch2
+
+PriceBatch2 <- session1 %>%
+  html_nodes(".s-widget-container > span div:nth-of-type(2) .a-row div.a-row:nth-of-type(1)") %>%
+  html_text()
+PriceBatch2 <- PriceBatch2 [1:35]
+PriceBatch2
+
+RatingsBatch2 <- session1 %>%
+  html_nodes(".s-widget-container > span div:nth-of-type(2) .a-section span.s-underline-text") %>%
+  html_text()
+RatingsBatch2 <- RatingsBatch2 [1:35]
+RatingsBatch2
+
+ReviewsBatch2 <- session1 %>%
+  html_nodes(".s-widget-container > span span.a-icon-alt") %>%
+  html_text()
+ReviewsBatch2 <- ReviewsBatch2 [1:35]
+ReviewsBatch2
+
+Watches <- rbind(Watches,data.frame
+                       (Name = NameBatch2,
+                        Price = PriceBatch2,
+                        No.Ratings = RatingsBatch2,
+                        Ratings = ReviewsBatch2))
+
+Link1_3 <- "https://www.amazon.co.uk/s?k=Watch&i=fashion&rh=n%3A11961407031&dc&ds=v1%3AN3d7kOYKFjQBlLFBX71qXtMSuVcw2NU777uZ6FRDReA&crid=3P7G4EVHY387&qid=1707442763&sprefix=watc%2Caps%2C448&ref=sr_ex_p_36_0"
+session2 <- bow(Link1_3, user_agent = "Educational Purposes")
+session2 <- scrape(session2)  
+
+NameBatch3 <- session2 %>%
+  html_nodes(".s-widget-container > span span.a-size-base-plus") %>%
+  html_text()
+NameBatch3 <- NameBatch3 [1:35]
+NameBatch3
+
+PriceBatch3 <- session2 %>%
+  html_nodes("div:nth-of-type(n+7) .s-widget-container > span .a-row div.a-row:nth-of-type(1)") %>%
+  html_text()
+PriceBatch3 <- PriceBatch3 [1:35]
+PriceBatch3
+
+RatingsBatch3 <- session2 %>%
+  html_nodes(".s-widget-container > span span.s-underline-text") %>%
+  html_text()
+RatingsBatch3 <- RatingsBatch3 [1:35]
+RatingsBatch3
+
+ReviewsBatch3 <- session2 %>%
+  html_nodes(".s-widget-container > span span.a-icon-alt") %>%
+  html_text()
+ReviewsBatch3 <- ReviewsBatch3 [1:35]
+ReviewsBatch3
+
+Watches <- rbind(Watches,data.frame
+                       (Name = NameBatch3,
+                        Price = PriceBatch3,
+                        No.Ratings = RatingsBatch3,
+                        Ratings = ReviewsBatch3))
+
+View(Watches)
+```
+
+```{r}
+
+library(polite)
+library(rvest)
+library(httr)
+library(dplyr)
+
+Monitors <- data.frame() 
+
+Link2_1 <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225007011&rh=n%3A16225007011%2Cn%3A1292115011&ref=nav_em__nav_desktop_sa_intl_monitors_0_2_6_8"
+session3 <- bow(Link2_1, user_agent = "Educational Purposes")
+session3 <- scrape(session3)  
+
+NameBatch1_1 <- session3 %>%
+  html_nodes("h2.a-size-mini.a-spacing-none.a-color-base.s-line-clamp-4") %>%
+  html_text()
+NameBatch1_1 <- NameBatch1_1[1:35]
+NameBatch1_1
+
+PriceBatch1_1 <- session3 %>%
+  html_nodes("div.a-section.a-spacing-none.a-spacing-top-small.s-price-instructions-style") %>%
+  html_text()
+PriceBatch1_1 <- PriceBatch1_1[1:35]
+PriceBatch1_1
+
+RatingsBatch1_1 <- session3 %>%
+  html_nodes(".a-size-base.s-underline-text") %>%
+  html_text()
+RatingsBatch1_1 <- RatingsBatch1_1[1:35]
+RatingsBatch1_1
+
+ReviewsBatch1_1 <- session3 %>%
+  html_nodes(".a-icon.a-icon-star-small.a-star-small-4-5.aok-align-bottom") %>%
+  html_text()
+ReviewsBatch1_1 <- ReviewsBatch1_1[1:35]
+ReviewsBatch1_1
+
+Monitors <- rbind(Monitors,data.frame
+                       (Name = NameBatch1_1,
+                        Price = PriceBatch1_1,
+                        No.Ratings = RatingsBatch1_1,
+                        Ratings = ReviewsBatch1_1))
+
+Link2_2 <- "https://www.amazon.com/s?i=computers-intl-ship&bbn=16225007011&rh=n%3A16225007011%2Cn%3A1292115011&page=2&qid=1708565359&ref=sr_pg_2"
+session4 <- bow(Link2_2, user_agent = "Educational Purposes")
+session4 <- scrape(session4)  
+
+NameBatch1_2 <- session4 %>%
+  html_nodes(".a-size-mini.a-spacing-none.a-color-base.s-line-clamp-4") %>%
+  html_text()
+NameBatch1_2 <- NameBatch1_2[1:35]
+NameBatch1_2
+
+PriceBatch1_2 <- session4 %>%
+  html_nodes(".a-price-whole") %>%
+  html_text()
+PriceBatch1_2 <- PriceBatch1_2[1:35]
+PriceBatch1_2
+
+RatingsBatch1_2 <- session4 %>%
+  html_nodes(".a-size-base.s-underline-text") %>%
+  html_text()
+RatingsBatch1_2 <- RatingsBatch1_2[1:35]
+RatingsBatch1_2
+
+ReviewsBatch1_2 <- session4 %>%
+  html_nodes("a-icon a-icon-star-small a-star-small-4-5 aok-align-bottom") %>%
+  html_text()
+ReviewsBatch1_2 <- ReviewsBatch1_2[1:35]
+ReviewsBatch1_2
+
+Monitors <- rbind(Monitors,data.frame
+                       (Name = NameBatch1_2,
+                        Price = PriceBatch1_2,
+                        No.Ratings = RatingsBatch1_2,
+                        Ratings = ReviewsBatch1_2))
+
+Link2_3 <- "https://www.amazon.com/s?i=computers-intl-ship&bbn=16225007011&rh=n%3A16225007011%2Cn%3A1292115011&page=3&qid=1708567362&ref=sr_pg_3"
+session5 <- bow(Link2_3, user_agent = "Educational Purposes")
+session5 <- scrape(session5)  
+
+NameBatch1_3 <- session5 %>%
+  html_nodes(".a-size-mini.a-spacing-none.a-color-base.s-line-clamp-4") %>%
+  html_text()
+NameBatch1_3 <- NameBatch1_3[1:35]
+NameBatch1_3
+
+PriceBatch1_3 <- session5 %>%
+  html_nodes(".span.a-price") %>%
+  html_text()
+PriceBatch1_3 <- PriceBatch1_3[1:35]
+PriceBatch1_3
+
+RatingsBatch1_3 <- session5 %>%
+  html_nodes(".a-size-base.s-underline-text") %>%
+  html_text()
+RatingsBatch1_3 <- RatingsBatch1_3[1:35]
+RatingsBatch1_3
+
+ReviewsBatch1_3 <- session5 %>%
+  html_nodes(".a-icon.a-icon-star-small.a-star-small-4-5.aok-align-bottom") %>%
+  html_text()
+ReviewsBatch1_3 <- ReviewsBatch1_3[1:35]
+ReviewsBatch1_3
+
+Monitors <- rbind(Monitors,data.frame
+                       (Name = NameBatch1_3,
+                        Price = PriceBatch1_3,
+                        No.Ratings = RatingsBatch1_3,
+                        Ratings = ReviewsBatch1_3))
+View(Monitors)
+```
+
+
+
+
+
