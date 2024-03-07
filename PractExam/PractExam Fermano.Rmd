@@ -1,0 +1,68 @@
+---
+title: "Untitled"
+author: "Fermano, Aaron John"
+date: "2024-03-07"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("tidyverse")
+```
+```
+
+#A. Load the built-in warpbreaks dataset.
+```{r}
+structure(warpbreaks)
+```
+
+#A1. Find out, in a single command, which columns of warpbreaks are either numeric or integer. What are the data types of each column?
+```{r}
+warpbreak <- sapply(warpbreaks, function(x) typeof(x))
+warpbreak
+```
+
+#A2. How many observations does it have?
+```{r}
+nrow(warpbreaks)
+```
+
+#A3. Is numeric a natural data type for the columns which are stored as such? Convert tointeger when necessary.
+```{r}
+warpbreaks$breaks <- as.integer(warpbreaks$breaks)
+```
+
+#A4. Error messages in R sometimes report the underlying type of an object rather than theuser-level class. Derive from the following code and error message what theunderlying type. Explain what is the error all about. Do not just copy the error message that was displayed.
+```{r}
+warpbreaks$breaks + 1
+```
+
+#B. Load the exampleFile.txt
+#B1. Read the complete file using readLines.
+```{r}
+BexampleFile <- readLines("exampleFile.txt")
+print(BexampleFile)
+```
+
+#B2. Separate the vector of lines into a vector containing comments and a vector
+containing the data. Hint: use grepl.
+```{r}
+Blines <- strsplit(BexampleFile, "\n")[[1]]
+
+Bcomments <- Blines[grepl("^#", Blines)]
+Bdata <- Blines[!grepl("^#", Blines)]
+```
+
+#B3. Extract the date from the first comment line and display on the screen “It was created data.”
+```{r}
+(date <- gsub(".*Created : ", "", Bcomments[1]))
+paste0("It was created ", date)
+```
+
+#B4. Read the data into a matrix as follows.
+#Ba. Split the character vectors in the vector containing data lines by semicolon (;) using strsplit.
