@@ -1,0 +1,145 @@
+---
+title: "Untitled"
+author: "Fermano, Aaron John"
+date: "2024-03-27"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```
+
+#install.packages("dplyr")
+#install.packages("stringr")
+#install.packages("httr")
+#install.packages("rvest")
+
+library(dplyr)
+library(stringr)
+library(httr)
+library(rvest)
+
+start <- proc.time()
+
+
+title <- author <- subject <- abstract <- meta <- vector("character")
+
+urlpage <- 'https://arxiv.org/search/?query=%22Democracy%22&searchtype=all&source=header&start='
+
+pages <- seq(from = 0, to = 100, by = 50)
+
+for(page in pages) {
+  
+  urllink <- paste0(urlpage, page)
+
+  arxivarticles <- read_html(urllink) %>% 
+    html_nodes('p.list-title.is-inline-block') %>% 
+    html_nodes('a[href^="https://arxiv.org/abs"]') %>% 
+    html_attr('href')
+  
+  
+  for(article_url in arxivarticles) {
+  
+    page_article <- read_html(article_url)
+
+    
+    Titlescrape <- page_article %>% html_nodes('h1.title.mathjax') %>% html_text(TRUE)
+    Titlescrape <- gsub('Title:', '',  Titlescrape)
+    title <- c(title, Titlescrape)
+    
+    
+    Authorscrape <-  page_article %>% html_nodes('div.authors') %>% html_text(TRUE)
+    Authorscrape <- gsub('Authors:','',Authorscrape)
+    author <- c(author, Authorscrape)
+    
+    
+    Subjectscrape <-  page_article %>% html_nodes('span.primary-subject') %>% html_text(TRUE)
+    subject <- c(subject, Subjectscrape)
+    
+
+    Abstractscrape <-  page_article %>% html_nodes('blockquote.abstract.mathjax') %>% html_text(TRUE)
+    scrapedAbstract <- sub('Abstract:','',Abstractscrape)
+    abstract <- c(abstract, Abstractscrape)
+    
+    
+  Metascrape <-  page_article %>% html_nodes('div.submission-history') %>% html_text(TRUE)
+     Metascrape <- gsub('\\s+', ' ',Metascrape)
+     Metascrape <- strsplit( Metascrape , '[v1]', fixed = T)
+     Metascrape  <-  Metascrape [[1]][2] %>% unlist %>% str_trim
+    meta <- c(meta,  Metascrape )
+    
+    
+    cat("Scraped article:", length(title), "\n")
+    Sys.sleep(1)
+  }
+}
+
+
+scrapearxivpapers <- data.frame(title, author, subject, abstract, meta)
+View(scrapearxivpapers)
+
+end <- proc.time()
+end - start 
+
+
+
+```
+
+## SAVED TO CSV AND RDATA
+
+```
+
+save(scrapearxivpapers, file = "Democracy.RData")
+write.csv(scrapearxivpapers, file = "Democracy.csv")
+
+```
+
+```
+library(DBI)
+library(odbc)
+library(RMySQL)
+library(dplyr,dbplyr)
+connection <- dbConnect(RMySQL::MySQL(),
+                        dsn="MariaDB-connection",
+                        Server = "localhost",
+                        dbname = "fermano_database", 
+                        user = "root", 
+                        password = "") 
+
+```
+
+```
+
+
+library(readr)
+
+transdata <- read.csv("Democracy.csv")
+tail(transdata)
+
+```
+
+
+
+```
+
+ dbWriteTable(connection, 'Arxivart', transdata, append = TRUE)
+
+```
+
+
+
+```
+dbListTables(connection)
+dbListFields(connection,'Arxivart')
+```
+
+
+
+```
+
+datarev <- dbGetQuery(connection, "SELECT * FROM fermano_database.Arxivart")
+glimpse(datarev)
