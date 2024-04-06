@@ -1,0 +1,69 @@
+---
+title: "Lab 5"
+author: "Fermano, Aaron John"
+date: "2024-04-06"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(stringr)
+```
+
+```{r}
+importcsv <- read.csv("allbindproduct.csv")
+reviewed <- importcsv
+```
+
+
+
+
+
+
+
+```{r}
+revs <- reviewed$reviewer
+reviewed$reviewer <- gsub("\\p{So}", "", reviewed$reviewer, perl = TRUE)
+```
+
+```{r}
+revreviews <- reviewed$reviews
+
+#lower
+reviewed$reviews <- tolower(reviewed$reviews)
+
+#remove emoji
+reviewed$reviews <- gsub("\\p{So}", "", reviewed$reviews, perl = TRUE)
+
+#removal of non-english rev 
+reviewed$reviews <- gsub("[^A-Za-z ]", "",  reviewed$reviews)
+```
+
+```{r}
+reviewed$date.of.review <- revs
+reviewed$date.of.review <- str_extract(reviewed$date.of.review,"\\d+\\s[A-Za-z]+\\s\\d+")
+reviewed$date.of.review <- as.Date(reviewed$date.of.review, format = "%d %b %Y")
+```
+
+```{r}
+revratings <- reviewed$ratings
+
+#filter-character
+reviewed$ratings <- gsub("\\s*out\\s*of\\s*5\\s*stars", "", reviewed$ratings)
+
+#filter-integer
+reviewed$ratings <- gsub("[^0-9.]", "", reviewed$ratings)
+
+#change-integer
+reviewed$ratings <- as.integer(reviewed$ratings)
+
+
+head(reviewed)
+```
+
